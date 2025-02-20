@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  xiaozhi-web:
+    build: .
+    container_name: xiaozhi-web
+    ports:
+      - "5001:5001"  # Web服务端口
+      - "5002:5002"  # WebSocket代理端口
+    environment:
+      - WS_URL=ws://your_server_address:9005  # 替换为你的服务器地址
+      - WEB_PORT=5001
+      - PROXY_PORT=5002
+    restart: unless-stopped

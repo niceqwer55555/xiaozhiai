@@ -1,0 +1,893 @@
+:root {
+    --primary-color: #4F46E5;
+    --secondary-color: #E5E7EB;
+    --success-color: #10B981;
+    --error-color: #EF4444;
+    --text-primary: #1F2937;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #F3F4F6;
+}
+
+.chat-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.settings-btn {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settings-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.settings-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    visibility: hidden;
+}
+
+.settings-panel.active {
+    right: 0;
+    visibility: visible;
+}
+
+.chat-box {
+    height: 500px;
+    overflow-y: auto;
+    padding: 1rem;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    margin: 1rem;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0;
+    max-width: 85%;
+    animation: fadeIn 0.3s ease;
+    position: relative;
+}
+
+.message-content {
+    padding: 0.75rem 1rem;
+    border-radius: 1.2rem;
+    position: relative;
+    word-break: break-word;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #9CA3AF;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.message.user {
+    margin-left: auto;
+}
+
+.message.user .message-time {
+    text-align: right;
+    margin-right: 0.5rem;
+}
+
+.message.server {
+    margin-right: auto;
+}
+
+.message.server .message-time {
+    text-align: left;
+    margin-left: 0.5rem;
+}
+
+.message.user .message-content {
+    background: var(--primary-color);
+    color: white;
+    border-bottom-right-radius: 0.3rem;
+    margin-left: auto;
+}
+
+.message.server .message-content {
+    background: white;
+    border: 1px solid var(--secondary-color);
+    border-bottom-left-radius: 0.3rem;
+    color: var(--text-primary);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.message.stt {
+    margin: 0.5rem auto;
+    max-width: 90%;
+    opacity: 0.8;
+}
+
+.message.stt .message-content {
+    background: rgba(79, 70, 229, 0.1);
+    border: 1px dashed #818CF8;
+    color: #4F46E5;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    padding: 0.5rem 1rem;
+}
+
+.message.stt .message-time {
+    text-align: center;
+    margin: 0.25rem 0;
+}
+
+.message.recording {
+    margin: 0.5rem auto;
+    max-width: 90%;
+    opacity: 0.8;
+}
+
+.message.recording .message-content {
+    background: rgba(79, 70, 229, 0.1);
+    border: 1px dashed #818CF8;
+    color: #4F46E5;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    padding: 0.5rem 1rem;
+}
+
+.message.recording .message-time {
+    text-align: center;
+    margin: 0.25rem 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.input-container {
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid var(--secondary-color);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 0.5rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.btn-primary:hover {
+    background: #4338CA;
+}
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-success:hover {
+    background: #059669;
+}
+
+.btn-danger {
+    background: var(--error-color);
+    color: white;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status::before {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.connected {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+}
+
+.connected::before {
+    background: var(--success-color);
+}
+
+.disconnected {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+}
+
+.disconnected::before {
+    background: var(--error-color);
+}
+
+.error {
+    background: rgba(245, 158, 11, 0.1);
+    color: #D97706;
+}
+
+.error::before {
+    background: #D97706;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* iOS 风格开关 */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 51px;
+    height: 31px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e9e9ea;
+    transition: .4s;
+    border-radius: 31px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 27px;
+    width: 27px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .25s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input:checked + .toggle-slider {
+    background-color: #34c759;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* 语音通话模式的样式 */
+.voice-call-mode {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 1100;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 1rem;
+    color: white;
+}
+
+.voice-call-mode.active {
+    display: flex;
+}
+
+.voice-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.voice-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.voice-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 2rem;
+}
+
+.voice-avatar-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.voice-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #f0f0f0;
+    position: relative;
+    border: 2px solid rgba(255,255,255,0.6);
+    overflow: visible;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+/* 创建多层涟漪效果 */
+.voice-avatar::before,
+.voice-avatar::after,
+.voice-avatar .ripple-1,
+.voice-avatar .ripple-2,
+.voice-avatar .ripple-3 {
+    content: '';
+    position: absolute;
+    border: 2px solid rgba(255,255,255,0.6);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+/* 涟漪动画，使用animation-fill-mode: forwards保持最终状态 */
+@keyframes rippleWave {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
+    }
+}
+
+/* 持续的涟漪动画 */
+.voice-avatar.speaking::before {
+    animation: rippleWave 2s linear infinite;
+    animation-delay: 0s;
+}
+
+.voice-avatar.speaking::after {
+    animation: rippleWave 2s linear infinite;
+    animation-delay: 0.4s;
+}
+
+.voice-avatar.speaking .ripple-1 {
+    animation: rippleWave 2s linear infinite;
+    animation-delay: 0.8s;
+}
+
+.voice-avatar.speaking .ripple-2 {
+    animation: rippleWave 2s linear infinite;
+    animation-delay: 1.2s;
+}
+
+.voice-avatar.speaking .ripple-3 {
+    animation: rippleWave 2s linear infinite;
+    animation-delay: 1.6s;
+}
+
+.voice-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.4);
+}
+
+/* 头像律动效果 - 独立的动画 */
+@keyframes avatarPulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
+}
+
+.voice-avatar.speaking {
+    animation: none; /* 移除之前的avatarBreath动画 */
+    transform-origin: center;
+    will-change: transform;
+}
+
+/* 用户说话时的音浪动画 */
+.voice-wave-container {
+    position: absolute;
+    left: 50%;
+    bottom: 180px;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.voice-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 100%;
+}
+
+.wave-line {
+    width: 2px;
+    background: linear-gradient(180deg, rgba(255,64,129,0.8) 0%, rgba(255,121,176,0.6) 100%);
+    border-radius: 4px;
+    height: 2px;
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 默认状态下的波形线 */
+.voice-wave .wave-line {
+    height: 3px;
+}
+
+/* 说话时的动画 */
+.voice-wave.active .wave-line {
+    animation: voiceWave 1s ease-in-out infinite;
+    will-change: height, opacity;
+}
+
+@keyframes voiceWave {
+    0% {
+        height: 2px;
+        opacity: 0.6;
+    }
+    50% {
+        height: var(--wave-height, 24px);
+        opacity: 0.8;
+    }
+    100% {
+        height: 2px;
+        opacity: 0.6;
+    }
+}
+
+/* 给每个线条不同的动画延迟,创造波浪效果 */
+.voice-wave.active .wave-line:nth-child(1) { animation-delay: -0.4s; }
+.voice-wave.active .wave-line:nth-child(2) { animation-delay: -0.3s; }
+.voice-wave.active .wave-line:nth-child(3) { animation-delay: -0.2s; }
+.voice-wave.active .wave-line:nth-child(4) { animation-delay: -0.1s; }
+.voice-wave.active .wave-line:nth-child(5) { animation-delay: 0s; }
+.voice-wave.active .wave-line:nth-child(6) { animation-delay: -0.1s; }
+.voice-wave.active .wave-line:nth-child(7) { animation-delay: -0.2s; }
+.voice-wave.active .wave-line:nth-child(8) { animation-delay: -0.3s; }
+.voice-wave.active .wave-line:nth-child(9) { animation-delay: -0.4s; }
+.voice-wave.active .wave-line:nth-child(10) { animation-delay: -0.5s; }
+
+/* 移除原来的波形动画相关样式 */
+.voice-wave-top, .voice-wave-bottom {
+    display: none;
+}
+
+/* 移除昵称显示 */
+.voice-name {
+    display: none;
+}
+
+.voice-info {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.voice-status-text {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.7);
+}
+
+.voice-controls {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.voice-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.voice-btn.mic {
+    background: #424242;
+}
+
+.voice-btn.mic.active {
+    background: #f44336;
+    animation: pulse 1.5s infinite;
+}
+
+.voice-btn.hangup {
+    background: #f44336;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244,67,54,0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(244,67,54,0); }
+    100% { box-shadow: 0 0 0 0 rgba(244,67,54,0); }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    /* 聊天容器适配 */
+    .chat-container {
+        max-width: 100%;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0;
+    }
+
+    /* 头部适配 */
+    .header {
+        padding: 1rem;
+    }
+
+    .header h1 {
+        font-size: 1.25rem;
+    }
+
+    .settings-btn {
+        right: 1rem;
+        top: 1rem;
+    }
+
+    /* 状态栏适配 */
+    .p-4.bg-gray-50 {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    /* 聊天区域适配 */
+    .chat-box {
+        flex: 1;
+        height: 0;  /* 配合flex: 1使用 */
+        margin: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    /* 消息气泡适配 */
+    .message {
+        max-width: 90%;
+    }
+
+    .message-content {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.9375rem;
+    }
+
+    .message-time {
+        font-size: 0.75rem;
+        margin-top: 0.125rem;
+        margin-bottom: 0.375rem;
+    }
+
+    /* 输入区域适配 */
+    .input-container {
+        padding: 0.75rem;
+        gap: 0.5rem;
+        border-top: 1px solid var(--secondary-color);
+        background: white;
+    }
+
+    input[type="text"] {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.95rem;
+        height: 42px;
+    }
+
+    .btn-primary {
+        min-width: 42px;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .btn-success {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+    }
+
+    .btn-primary svg, .btn-success svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    /* 隐藏发送按钮的文字，只显示图标 */
+    .btn-primary span {
+        display: none;
+    }
+
+    /* 设置面板适配 */
+    .settings-panel {
+        width: 100%;
+        right: -100%;
+    }
+
+    .settings-panel .flex.justify-end.space-x-2 {
+        width: 100%;
+    }
+
+    /* 设置面板按钮适配 */
+    .settings-panel .btn-primary,
+    .settings-panel .btn-danger {
+        min-width: unset;
+        padding: 0.75rem 1rem;
+        font-size: 0.9375rem;
+        height: auto;
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .settings-panel .btn-primary span,
+    .settings-panel .btn-danger span {
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+    }
+
+    /* 设置面板底部按钮容器适配 */
+    .settings-panel .flex.justify-end.space-x-2 {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem;
+        background: white;
+        border-top: 1px solid var(--secondary-color);
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: center;
+        z-index: 1001;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s linear 0.3s, opacity 0.3s linear;
+    }
+
+    .settings-panel.active .flex.justify-end.space-x-2 {
+        visibility: visible;
+        opacity: 1;
+        transition-delay: 0s;
+    }
+
+    .settings-panel .flex.justify-end.space-x-2 button {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 设置面板内容区域适配 */
+    .settings-panel .space-y-4 {
+        padding-bottom: 5rem;
+    }
+
+    /* 语音通话模式适配 */
+    .voice-call-mode {
+        padding: 1rem;
+    }
+
+    .voice-header {
+        padding: 0.75rem 0;
+    }
+
+    .voice-title {
+        font-size: 1.125rem;
+    }
+
+    .voice-avatar-container {
+        width: 100px;
+        height: 100px;
+        margin: 2rem 0;
+    }
+
+    .voice-wave-container {
+        bottom: 160px;
+    }
+
+    .voice-controls {
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .voice-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .voice-btn svg {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    /* 状态指示器适配 */
+    .status {
+        padding: 0.25rem 0.625rem;
+        font-size: 0.8125rem;
+    }
+
+    /* 设备ID显示适配 */
+    .text-sm.text-gray-600 {
+        font-size: 0.8125rem;
+    }
+}
+
+/* 针对超小屏幕的额外适配 */
+@media (max-width: 360px) {
+    .chat-box {
+        margin: 0.25rem;
+        padding: 0.5rem;
+    }
+
+    .input-container {
+        padding: 0.5rem;
+    }
+
+    .message {
+        max-width: 95%;
+    }
+
+    .voice-avatar-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .voice-controls {
+        gap: 1rem;
+    }
+
+    .voice-btn {
+        width: 48px;
+        height: 48px;
+    }
+
+    .settings-panel .btn-primary,
+    .settings-panel .btn-danger {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* 安全区适配 */
+@supports (padding: max(0px)) {
+    .chat-container {
+        padding-top: max(0px, env(safe-area-inset-top));
+        padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
+
+    .input-container {
+        padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
+
+    .voice-controls {
+        padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    }
+
+    .settings-panel .flex.justify-end.space-x-2 {
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+} 
