@@ -37,8 +37,8 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.0,kivymd==1.1.1,pillow==10.3.0,requests==2.32.3,paho-mqtt==2.1.0,PyAudio==0.2.14,opuslib==3.0.1,cryptography==44.0.0
-
+requirements = python3,kivy==2.3.0,kivymd==1.1.1,pillow==10.3.0,altgraph==0.17.4,bottle==0.13.2,bottle-websocket==0.2.9,certifi==2025.1.31,cffi==1.17.1,charset-normalizer==3.4.1,comtypes==1.4.10,cryptography==44.0.0,docutils==0.21.2,Eel==0.18.1,filetype==1.2.0,future==1.0.0,gevent==24.11.1,gevent-websocket==0.10.1,greenlet==3.1.1,idna==3.10,Kivy==2.3.1,kivy-deps.angle==0.4.0,kivy-deps.glew==0.3.1,Kivy-Garden==0.1.5,kivy_deps.sdl2==0.8.0,opuslib==3.0.1,packaging==24.2,paho-mqtt==2.1.0,pefile==2023.2.7,psutil==7.0.0,PyAudio==0.2.14,pycaw==20240210,pycparser==2.22,Pygments==2.19.1,pyparsing==3.2.1
+,pypiwin32==223,pywin32==308,pywin32-ctypes==0.2.3,requests==2.32.3,setuptools==75.8.0,six==1.17.0,typing_extensions==4.12.2,urllib3==2.3.0,zope.event==5.0,zope.interface==7.2
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
