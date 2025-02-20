@@ -1,80 +1,57 @@
-name: 'Kivy App to APK'
-description: 'Convert Kivy app to APK'
-inputs:
-  python-version:
-    description: 'Python version to use'
-    default: '3.12'
-  work-dir:
-    default: '.xiaozhi-client/py-xiaozhi-mqtt'
-    description: 'Working directory'
-  buildozer-cmd:
-    default: 'buildozer android debug'
-    description: 'Buildozer command to use'
 
-# Add the branding section
-branding:
-  color: 'green'
-  icon: 'play'
+name: Build (with Buildozer master)
+on:
+  push:
+    branches-ignore:
+      - data
+      - gh-pages
+    tags:
+      - '**'
+  pull_request:
+    branches-ignore:
+      - data
+      - gh-pages
+  schedule:
+      - cron: 0 0 */4 * * # at 00:00 UTC every fourth day
 
-runs:
-  using: "composite"
-  steps:
-    - name: Setup python
-      uses: actions/setup-python@v5
-      with:
-        architecture: x64
-        python-version: ${{ inputs.python-version }}
+jobs:
+  # Build job. Builds app for Android with Buildozer
+  build-android:
+    name: Build for Android (with Buildozer master)
+    runs-on: ubuntu-latest
 
-    - name: Setup Java 17 required by Gradle
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'  # or 'zulu','liberica', etc.
-        java-version: '17'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: master
 
-    - name: Set JAVA_HOME
-      run: |
-        echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
-      shell: bash
+      - name: Build with Buildozer
+        uses: ./master # REPLACE WITH ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          repository_root: master
+          workdir: test_app
+          buildozer_version: master
 
-    - name: Prepare virtual environment
-      run: |
-        python3 -m venv venv
-        source venv/bin/activate
-        echo "Using Python==$(python --version)"
-      shell: bash
-      
-    - name: Install and upgrade dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y git \
-          zip \
-          unzip \
-          openjdk-17-jdk \
-          python3-pip \
-          autoconf \
-          libtool \
-          pkg-config \
-          zlib1g-dev \
-          libncurses5-dev \
-          libncursesw5-dev \
-          libtinfo5 \
-          cmake \
-          libffi-dev \
-          libssl-dev
-        export PATH=$PATH:~/.local/bin/
-        python3 -m pip install --upgrade \
-          Cython==0.29.33 \
-          buildozer
-      shell: bash
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
 
-    - name: Install requirements in requirements.txt if it exists
-      run: |
-        if [ -f requirements.txt ]; then
-          python3 -m pip install -r requirements.txt
-        fi
-      shell: bash
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: data
+          ref: data # Branch name
 
-    - name: Build with Buildozer
-      run: |
-        ${{ inputs.buildozer-cmd }}
-      shell: bash
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+          architecture: x64
+
+      - name: Push binary to data branch
+        if: github.event_name == 'push'
+        run: python master/.ci/move_binary.py "${{ steps.buildozer.outputs.filename }}" master data bin-with-master
