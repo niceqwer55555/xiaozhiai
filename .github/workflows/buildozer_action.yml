@@ -122,7 +122,6 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install buildozer cython==0.29.33 git+https://github.com/kivy/plyer.git
-          pip install -r requirements
 
       # Build with Buildozer
       - name: Build with Buildozer
