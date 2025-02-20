@@ -1,5 +1,4 @@
-
-name: Build (with Buildozer master)
+name: Build
 on:
   push:
     branches-ignore:
@@ -11,13 +10,11 @@ on:
     branches-ignore:
       - data
       - gh-pages
-  schedule:
-      - cron: 0 0 */4 * * # at 00:00 UTC every fourth day
 
 jobs:
   # Build job. Builds app for Android with Buildozer
   build-android:
-    name: Build for Android (with Buildozer master)
+    name: Build for Android
     runs-on: ubuntu-latest
 
     steps:
@@ -32,7 +29,7 @@ jobs:
         with:
           repository_root: master
           workdir: test_app
-          buildozer_version: master
+          buildozer_version: stable
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
@@ -54,4 +51,4 @@ jobs:
 
       - name: Push binary to data branch
         if: github.event_name == 'push'
-        run: python master/.ci/move_binary.py "${{ steps.buildozer.outputs.filename }}" master data bin-with-master
+        run: python master/.ci/move_binary.py "${{ steps.buildozer.outputs.filename }}" master data bin
