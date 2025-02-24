@@ -1,0 +1,4 @@
+opuslib==3.0.1
+PyAudio==0.2.13
+pynput==1.7.7
+websocket_client==1.6.1
