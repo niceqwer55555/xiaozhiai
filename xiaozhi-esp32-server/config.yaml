@@ -22,13 +22,28 @@ server:
     # 可选:设备白名单，如果设置了白名单，那么白名单的机器无论是什么token都可以连接。
     #allowed_devices:
     #  - "24:0A:C4:1D:3B:F0"  # MAC地址列表
+log:
+  # 设置控制台输出的日志格式，时间、日志级别、标签、消息
+  log_format: "<green>{time:YY-MM-DD HH:mm:ss}</green>[<light-blue>{extra[tag]}</light-blue>] - <level>{level}</level> - <light-green>{message}</light-green>"
+  # 设置日志文件输出的格式，时间、日志级别、标签、消息
+  log_format_simple: "{time:YYYY-MM-DD HH:mm:ss} - {name} - {level} - {extra[tag]} - {message}"
+  # 设置日志等级：INFO、DEBUG
+  log_level: INFO
+  # 设置日志路径
+  log_dir: tmp
+  # 设置日志文件
+  log_file: "server.log"
+  # 设置数据文件路径
+  data_dir: data
 manager:
   # 是否启用管理后台
   # 目前这个模块还在开发中，建议：不要修改enabled选项
   enabled: false
   ip: 0.0.0.0
   port: 8002
-
+iot:
+  Speaker:
+    volume: 100
 xiaozhi:
   type: hello
   version: 1
@@ -68,9 +83,15 @@ selected_module:
 
 ASR:
   FunASR:
+    type: fun_local
     model_dir: models/SenseVoiceSmall
     output_dir: tmp/
-
+  DoubaoASR:
+    type: doubao
+    appid: 你的火山引擎语音合成服务appid
+    access_token: 你的火山引擎语音合成服务access_token
+    cluster: volcengine_input_common
+    output_dir: tmp/
 VAD:
   SileroVAD:
     threshold: 0.5
@@ -93,13 +114,6 @@ LLM:
     model_name: deepseek-chat
     url: https://api.deepseek.com
     api_key: 你的deepseek api key
-  LlamacppLLM:
-    # 定义LLM API类型
-    model_name: deepseek-chat
-    type: llamacpp
-    # 可在这里找到你的api key https://platform.deepseek.com/
-    url: http://192.168.137.91:8080
-    api_key: 81791e8e816f424aaf0ac681f260f198.y0Vm2Z3AoUOXKAgt
   ChatGLMLLM:
     # 定义LLM API类型
     type: openai
@@ -107,7 +121,7 @@ LLM:
     # 可在这里找到你的api key https://bigmodel.cn/usercenter/proj-mgmt/apikeys
     model_name: glm-4-flash
     url: https://open.bigmodel.cn/api/paas/v4/
-    api_key: 81791e8e816f424aaf0ac681f260f198.y0Vm2Z3AoUOXKAgt
+    api_key: 你的chat-glm api key
   OllamaLLM:
     # 定义LLM API类型
     type: ollama
@@ -135,6 +149,18 @@ LLM:
     user_id: 你的user_id
     base_url: "https://api.coze.cn/open_api/v2/chat" # 服务地址
     personal_access_token: 你的coze个人令牌
+  LMStudioLLM:
+    # 定义LLM API类型
+    type: openai
+    model_name: deepseek-r1-distill-llama-8b@q4_k_m # 使用的模型名称，需要预先在社区下载
+    url: http://localhost:1234/v1 # LM Studio服务地址
+    api_key: lm-studio # LM Studio服务的固定API Key
+  HomeAssistant:
+    # 定义LLM API类型
+    type: homeassistant
+    base_url: http://homeassistant.local:8123
+    agent_id: conversation.chatgpt
+    api_key: 你的home assistant api访问令牌
 TTS:
   # 当前支持的type为edge、doubao，可自行适配
   EdgeTTS:
@@ -224,3 +250,81 @@ TTS:
     parallel_infer: true
     repetition_penalty: 1.35
     aux_ref_audio_paths: []
+  MinimaxTTS:
+    # Minimax语音合成服务，需要先在minimax平台创建账户充值，并获取登录信息
+    # 平台地址：https://platform.minimaxi.com/
+    # 充值地址：https://platform.minimaxi.com/user-center/payment/balance
+    # group_id地址：https://platform.minimaxi.com/user-center/basic-information
+    # api_key地址：https://platform.minimaxi.com/user-center/basic-information/interface-key
+    # 定义TTS API类型
+    type: minimax
+    output_file: tmp/
+    group_id: 你的minimax平台groupID
+    api_key: 你的minimax平台接口密钥
+    model: "speech-01-turbo"
+    # 此处设置将优先于voice_setting中voice_id的设置；如都不设置，默认为 female-shaonv
+    voice_id: "female-shaonv"
+    # 以下可不用设置，使用默认设置
+    # voice_setting:
+    #     voice_id: "male-qn-qingse"
+    #     speed: 1
+    #     vol: 1
+    #     pitch: 0
+    #     emotion: "happy"
+    # pronunciation_dict:
+    #     tone:
+    #       - "处理/(chu3)(li3)"
+    #       - "危险/dangerous"
+    # audio_setting:
+    #     sample_rate: 32000
+    #     bitrate: 128000
+    #     format: "mp3"
+    #     channel: 1
+    # timber_weights:
+    #   -
+    #     voice_id: male-qn-qingse
+    #     weight: 1
+    #   -
+    #     voice_id: female-shaonv
+    #     weight: 1
+    # language_boost: auto
+  AliyunTTS:
+    # 阿里云智能语音交互服务，需要先在阿里云平台开通服务，然后获取验证信息
+    # 平台地址：https://nls-portal.console.aliyun.com/
+    # appkey地址：https://nls-portal.console.aliyun.com/applist
+    # token地址：https://nls-portal.console.aliyun.com/overview
+    # 定义TTS API类型
+    type: aliyun
+    output_file: tmp/
+    appkey: 你的阿里云智能语音交互服务项目Appkey
+    token: 你的阿里云智能语音交互服务AccessToken
+    voice: xiaoyun
+    # 以下可不用设置，使用默认设置
+    # format: wav
+    # sample_rate: 16000
+    # volume: 50
+    # speech_rate: 0
+    # pitch_rate: 0
+
+# 模块测试配置
+module_test:
+  test_sentences:  # 自定义测试语句
+    - "你好，请介绍一下你自己"
+    - "What's the weather like today?"
+    - "请用100字概括量子计算的基本原理和应用前景"
+
+# 本地音乐播放配置
+music:
+  music_commands:
+    - "来一首歌"
+    - "唱一首歌"
+    - "播放音乐"
+    - "来点音乐"
+    - "背景音乐"
+    - "放首歌"
+    - "播放歌曲"
+    - "来点背景音乐"
+    - "我想听歌"
+    - "我要听歌"
+    - "放点音乐"
+  music_dir: "./music"  # 音乐文件存放路径
